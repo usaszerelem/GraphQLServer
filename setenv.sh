@@ -1,0 +1,10 @@
+export NODE_ENV=development
+export NODE_TLS_REJECT_UNAUTHORIZED=0
+export SERVICE_NAME='book-server'
+export USE_HTTPS=false
+export PORT=3000
+export MONGODB_URL='mongodb://localhost:27017/books'
+export LOG_LEVEL=debug
+export CONSOLELOG_ENABLED=true
+export FILELOG_ENABLED=true
+export MONGOLOG_ENABLED=true

@@ -1,0 +1,97 @@
+import { Application } from 'express';
+import { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLID, GraphQLInt, GraphQLList } from 'graphql';
+import { graphqlHTTP } from 'express-graphql';
+import _ from 'lodash';
+
+export function InitGraphQL(app: Application) {
+    const books = [
+        { name: 'Name of the Wind', genre: 'Fantasy', id: '1', authorId: '1' },
+        { name: 'The Final Empire', genre: 'Fantasy', id: '2', authorId: '2' },
+        { name: 'The Long Earth', genre: 'Sci-Fi', id: '3', authorId: '3' },
+        { name: 'The Hero of Ages', genre: 'Fantasy', id: '4', authorId: '2' },
+        { name: 'The Colour of Magic', genre: 'Fantasy', id: '5', authorId: '3' },
+        { name: 'The Light Fantastic', genre: 'Fantasy', id: '6', authorId: '3' },
+    ];
+
+    const authors = [
+        { name: 'Patrick Rothfuss', age: 44, id: '1' },
+        { name: 'Brandon Sanderson', age: 42, id: '2' },
+        { name: 'Terry Pratchett', age: 66, id: '3' },
+    ];
+
+    const BookType: any = new GraphQLObjectType({
+        name: 'Book',
+        fields: () => ({
+            id: { type: GraphQLID },
+            name: { type: GraphQLString },
+            genre: { type: GraphQLString },
+            author: {
+                type: AuthorType,
+                resolve(parent, _args) {
+                    console.log(`Resolve parent:` + JSON.stringify(parent, null, 2));
+                    // code to get data from db / other source
+                    return _.find(authors, { id: parent.authorId });
+                },
+            },
+        }),
+    });
+
+    const AuthorType: any = new GraphQLObjectType({
+        name: 'Author',
+        fields: () => ({
+            id: { type: GraphQLID },
+            name: { type: GraphQLString },
+            age: { type: GraphQLInt },
+            books: {
+                type: new GraphQLList(BookType),
+                resolve(parent, _args) {
+                    return _.filter(books, { authorId: parent.id });
+                },
+            },
+        }),
+    });
+
+    const RootQuery = new GraphQLObjectType({
+        name: 'RootQueryType',
+        fields: () => ({
+            book: {
+                type: BookType,
+                args: {
+                    id: { type: GraphQLID },
+                },
+                resolve(_parent, args) {
+                    // code to get data from db / other source
+                    return _.find(books, { id: args.id });
+                },
+            },
+            author: {
+                type: AuthorType,
+                args: {
+                    id: { type: GraphQLID },
+                },
+                resolve(_parent, args) {
+                    // code to get data from db / other source
+                    return _.find(authors, { id: args.id });
+                },
+            },
+            books: {
+                type: new GraphQLList(BookType),
+                resolve(_parent, _args) {
+                    return books;
+                },
+            },
+            authors: {
+                type: new GraphQLList(AuthorType),
+                resolve(_parent, _args) {
+                    return authors;
+                },
+            },
+        }),
+    });
+
+    const schema = new GraphQLSchema({
+        query: RootQuery,
+    });
+
+    app.use('/graphql', graphqlHTTP({ schema, graphiql: true }));
+}

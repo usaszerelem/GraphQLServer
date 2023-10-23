@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
 import { AppEnv, Env } from './utils/AppEnv';
 import { Server as HttpServer } from 'http';
-import { InitGraphQL } from './startup/InitGraphQL';
+import { ServerInit } from './startup/serverInit';
 
 // ---------------------------------------------------------
 // Global variables and type declarations
@@ -16,7 +16,7 @@ type AddressInfo = {
     port: number;
 };
 
-InitGraphQL(app);
+ServerInit(app);
 
 const port = parseInt(AppEnv.Get(Env.PORT));
 

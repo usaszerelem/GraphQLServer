@@ -30,5 +30,5 @@ function getServerAddress(addrInfo: AddressInfo) {
     if (addrInfo?.address === '::') {
         addrInfo.address = 'localhost';
     }
-    return `http://${addrInfo.address}:${addrInfo.port}`;
+    return `http://${addrInfo.address}:${addrInfo.port}/graphql`;
 }

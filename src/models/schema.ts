@@ -29,12 +29,6 @@ const authorSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
-        /*
-        books: {
-            type: Array,
-            bookIds: [{ type: String }],
-        },
-        */
     },
     { timestamps: true, versionKey: false }
 );

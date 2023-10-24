@@ -10,6 +10,8 @@
     "author": "Martin Fallenstedt",
     "license": "ISC",
     "dependencies": {
+        "@types/cors": "^2.8.15",
+        "cors": "^2.8.5",
         "express": "^4.18.2",
         "express-graphql": "^0.12.0",
         "graphql": "^16.8.1",

@@ -25,6 +25,7 @@ export class AppEnv {
         if (this.missingEnvVars.length > 0) {
             const msg = '*** ERROR: Missing environment variables: ' + this.missingEnvVars.flat();
             console.log(msg);
+            console.log('Run setenv.sh to set your own specific environment variables');
             throw new Error(msg);
         }
     }
